@@ -6,6 +6,45 @@ axios.defaults.withCredentials = true;
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const EyeIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-5 h-5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
+
+const EyeSlashIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-5 h-5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3 3l18 18M9.88 9.88a3 3 0 004.24 4.24M6.75 6.75C4.5 8.25 2.25 12 2.25 12s3.75 6.75 9.75 6.75c1.5 0 2.91-.36 4.17-.99M17.25 17.25C19.5 15.75 21.75 12 21.75 12s-3.75-6.75-9.75-6.75c-.91 0-1.79.13-2.62.37"
+    />
+  </svg>
+);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,8 +96,7 @@ const EmployeeManagement = () => {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-        }, 
-      
+        },
       };
 
       const res = await axios.get(
@@ -201,143 +239,150 @@ const EmployeeManagement = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Employees</h2>
       </div>
+<form
+  onSubmit={handleSubmit}
+  className="bg-white p-6 rounded-lg shadow-md space-y-6"
+>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <input
+      type="text"
+      name="name"
+      placeholder="Full Name"
+      value={formData.name}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    <input
+      type="email"
+      name="email"
+      placeholder="Email"
+      value={formData.email}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    {!editingId && (
+      <div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Password"
+    onChange={handleChange}
+    required
+    className="border border-gray-300 p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+  />
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-blue-600 focus:outline-none"
+  >
+    {showPassword ? EyeSlashIcon : EyeIcon}
+  </button>
+</div>
+    )}
+    <select
+      name="department"
+      value={formData.department}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    >
+      <option value="">Select Department</option>
+      {departments.map((dept) => (
+        <option key={dept._id} value={dept._id}>
+          {dept.name}
+        </option>
+      ))}
+    </select>
+    <input
+      type="text"
+      name="designation"
+      placeholder="Designation"
+      value={formData.designation}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    <input
+      type="number"
+      name="salary"
+      placeholder="Salary"
+      value={formData.salary}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    <input
+      type="tel"
+      name="phoneNumber"
+      placeholder="Phone Number"
+      value={formData.phoneNumber}
+      onChange={handleChange}
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    <textarea
+      name="address"
+      placeholder="Address"
+      value={formData.address}
+      onChange={handleChange}
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"
+      rows={3}
+    />
+    <input
+      type="date"
+      name="dateOfJoining"
+      value={formData.dateOfJoining}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    />
+    <select
+      name="role"
+      value={formData.role}
+      onChange={handleChange}
+      required
+      className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    >
+      <option value="employee">Employee</option>
+      <option value="manager">Manager</option>
+      <option value="admin">Admin</option>
+    </select>
+    <label className="flex items-center space-x-3">
+      <input
+        type="checkbox"
+        name="isActive"
+        checked={formData.isActive}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            isActive: e.target.checked,
+          }))
+        }
+        className="form-checkbox h-5 w-5 text-blue-600 transition"
+      />
+      <span className="text-sm font-medium text-gray-700">Active Status</span>
+    </label>
+  </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-4 rounded shadow mb-6"
+  <div className="flex gap-4">
+    <button
+      type="submit"
+      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition-transform hover:scale-105"
+    >
+      {editingId ? "Update Employee" : "Add Employee"}
+    </button>
+    {editingId && (
+      <button
+        type="button"
+        onClick={handleCancelEdit}
+        className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md transition-transform hover:scale-105"
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          {!editingId && (
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-              className="border p-2 rounded"
-            />
-          )}
-          <select
-            name="department"
-            value={formData.department}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          >
-            <option value="">Select Department</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept._id}>
-                {dept.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            name="designation"
-            placeholder="Designation"
-            value={formData.designation}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            name="salary"
-            placeholder="Salary"
-            value={formData.salary}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          <input
-            type="tel"
-            name="phoneNumber"
-            placeholder="Phone Number"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <textarea
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <input
-            type="date"
-            name="dateOfJoining"
-            value={formData.dateOfJoining}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          >
-            <option value="employee">Employee</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-          </select>
-          <div className="flex items-center">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    isActive: e.target.checked,
-                  }))
-                }
-                className="form-checkbox h-5 w-5 text-blue-600"
-              />
-              <span>Active Status</span>
-            </label>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            {editingId ? "Update Employee" : "Add Employee"}
-          </button>
-          {editingId && (
-            <button
-              type="button"
-              onClick={handleCancelEdit}
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
-
+        Cancel
+      </button>
+    )}
+  </div>
+</form>
       {/* Table */}
       <div className="bg-white p-4 rounded shadow">
         <h3 className="text-lg font-semibold mb-4">Employee List</h3>
