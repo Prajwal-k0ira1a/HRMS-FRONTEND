@@ -3,18 +3,30 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const DepartmentManager = () => {
+  const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
+axios.defaults.withCredentials = true;
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     budget: "",
+    head: "",
+
   });
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
+    fetchEmployees();
     fetchDepartments();
   }, []);
-
+const fetchEmployees = async () => {
+  try {
+    const res = await axios.get("http://localhost:3152/api/employees/get");
+    setEmployees(res.data.data); // Adjust based on your API response structure
+  } catch (err) {
+    console.error("Failed to fetch employees:", err);
+  }
+};
   const fetchDepartments = async () => {
     try {
       const res = await axios.get("http://localhost:3152/api/department/get");
@@ -67,6 +79,7 @@ const DepartmentManager = () => {
       name: dept.name || "",
       description: dept.description || "",
       budget: dept.budget || "",
+      head: dept.head || "",
     });
     setEditingId(dept._id);
   };
@@ -98,56 +111,100 @@ const DepartmentManager = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Departments</h2>
       </div>
+<form
+  onSubmit={handleSubmit}
+  className="bg-white p-6 rounded-lg shadow-md space-y-6"
+>
+  {/* Department Head Selection */}
+  <div>
+    <label htmlFor="head" className="block text-sm font-medium text-gray-700 mb-1">
+      Department Head
+    </label>
+    <select
+      id="head"
+      name="head"
+      value={formData.head}
+      onChange={handleChange}
+      className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    >
+      <option value="">Select Department Head</option>
+      {employees.map((emp) => (
+        <option key={emp._id} value={emp._id}>
+          {emp.name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-4 rounded shadow mb-6"
+  {/* Department Details */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div>
+      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        Department Name
+      </label>
+      <input
+        id="name"
+        type="text"
+        name="name"
+        placeholder="Department Name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+      />
+    </div>
+
+    <div>
+      <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        Description
+      </label>
+      <input
+        id="description"
+        type="text"
+        name="description"
+        placeholder="Description"
+        value={formData.description}
+        onChange={handleChange}
+        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+      />
+    </div>
+
+    <div>
+      <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
+        Budget
+      </label>
+      <input
+        id="budget"
+        type="number"
+        name="budget"
+        placeholder="Budget"
+        min={0}
+        value={formData.budget}
+        onChange={handleChange}
+        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+      />
+    </div>
+  </div>
+
+  {/* Action Buttons */}
+  <div className="flex gap-4">
+    <button
+      type="submit"
+      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition-transform hover:scale-105"
+    >
+      {editingId ? "Update Department" : "Add Department"}
+    </button>
+    {editingId && (
+      <button
+        type="button"
+        onClick={handleCancelEdit}
+        className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md transition-transform hover:scale-105"
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            name="budget"
-            placeholder="Budget"
-            value={formData.budget}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            {editingId ? "Update Department" : "Add Department"}
-          </button>
-          {editingId && (
-            <button
-              type="button"
-              onClick={handleCancelEdit}
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
+        Cancel
+      </button>
+    )}
+  </div>
+</form>
 
       {/* Table */}
       <div className="bg-white p-4 rounded shadow">

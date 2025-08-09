@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 const AttendanceManager = () => {
   const [records, setRecords] = useState([]);
+  axios.defaults.withCredentials = true;
   const [formData, setFormData] = useState({
     userId: "",
     date: "",

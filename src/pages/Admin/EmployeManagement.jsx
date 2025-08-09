@@ -7,6 +7,7 @@ const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  axios.defaults.withCredentials = true;
   const EyeIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
