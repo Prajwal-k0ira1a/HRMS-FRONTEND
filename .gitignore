@@ -1,24 +1,104 @@
-# Logs
-logs
-*.log
+# Node.js
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build output
+dist/
+build/
+out/
+*.log
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# React Native / Expo
+.expo/
+.expo-shared/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS-specific
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains IDEs
+*.iml
+*.ipr
+*.iws
+out/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+bin/
+
+# Swing GUI builder artifacts
+*.form
+
+# MongoDB dump files
+dump/
+*.bson
+*.json
+
+# Figma exports
+*.fig
+*.svg
+*.pdf
+
+# Logs and temp
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Testing
+jest/
+cypress/screenshots/
+cypress/videos/
+
+# Dependency directories
+bower_components/
+jspm_packages/
+
+# TypeScript
+*.tsbuildinfo
+
+# Python (if used for scripts)
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Misc
+*.lock
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+
+# Git
+.git/
+.gitignore
+
+# Optional: ignore local database files
+*.sqlite
+*.db
+
+# Optional: ignore compiled assets
+*.min.js
+*.min.css

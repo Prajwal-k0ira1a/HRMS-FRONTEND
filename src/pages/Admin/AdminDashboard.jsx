@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Dashboard from "./Dashboard";
 import SideBar from "../../component/Admin/SideBar";
-
+import DepartmentManager from "./DepartmentManager";
+import EmployeeManagement from "./EmployeManagement";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showForm, setShowForm] = useState(false);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -11,34 +13,10 @@ const AdminDashboard = () => {
         return <Dashboard />;
 
       case "employees":
-        return (
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Employees</h2>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Add Employee
-              </button>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <p>Employee list and management </p>
-            </div>
-          </div>
-        );
+        return <EmployeeManagement />;
 
       case "departments":
-        return (
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Departments</h2>
-              <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                Add Department
-              </button>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <p>Department list and management </p>
-            </div>
-          </div>
-        );
+        return <DepartmentManager />;
 
       case "attendance":
         return (

@@ -23,25 +23,33 @@ const Login = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(employee));
-
+      console.log("Employee data:", employee);
+      console.log("Token:", token);
       // Navigate based on role
-      if (employee.role === "admin") {
+      if (employee.role === "admin" || employee.role === "manager") {
         toast.success("Login successful 🎉", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
         });
+        // After login success:
         navigate("/admin-dashboard");
+        localStorage.setItem("token", res.data.data.token);
       } else if (employee.role === "manager") {
-        navigate("/teacher-dashboard");
+        navigate("/");
       } else if (employee.role === "student") {
-        navigate("/student-dashboard");
+        navigate("/");
       } else {
         setError("Unknown role. Contact admin.");
       }
 
       console.log("Login successful:", employee);
     } catch (error) {
+      toast.error("Unknown role. Contact admin.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
       setError(
         error.response?.data?.message || "Login failed. Please try again."
       );
